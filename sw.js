@@ -1,23 +1,22 @@
-const CACHE_NAME = "student-pwa-v1";
+const CACHE = "pwa-v1";
 
-const FILES = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/app.js",
-  "/manifest.json",
-  "/icon-192.png",
-  "/icon-512.png"
-];
-
-self.addEventListener("install", e => {
+self.addEventListener("install", e=>{
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES))
+    caches.open(CACHE).then(c=>{
+      return c.addAll([
+        "./",
+        "index.html",
+        "login.html",
+        "style.css",
+        "app.js",
+        "manifest.json"
+      ]);
+    })
   );
 });
 
-self.addEventListener("fetch", e => {
+self.addEventListener("fetch", e=>{
   e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+    caches.match(e.request).then(r=>r || fetch(e.request))
   );
 });
