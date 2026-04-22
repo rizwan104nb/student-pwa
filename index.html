@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
+  <title>Student PWA</title>
+
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#007bff">
 </head>
+
 <body>
 
-<h2>Login Page</h2>
+<h2>Student System</h2>
 
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
+<p id="userBox"></p>
 
-<button onclick="login()">Login</button>
+<input id="name" placeholder="Name">
+<input id="class" placeholder="Class">
 
-<script>
-function login(){
-  localStorage.setItem("user", document.getElementById("user").value);
-  window.location.href = "index.html";
-}
-</script>
+<button onclick="addStudent()">Add</button>
+<button onclick="showStudents()">Show</button>
+
+<div id="output"></div>
+
+<br>
+<button id="installBtn" style="display:none;">Install App</button>
+
+<script src="app.js"></script>
 
 </body>
 </html>
