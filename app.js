@@ -1,9 +1,9 @@
-// REGISTER SERVICE WORKER
+// SW
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
-// INSTALL BUTTON
+// INSTALL
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -12,52 +12,42 @@ window.addEventListener('beforeinstallprompt', (e) => {
   document.getElementById("installBtn").style.display = "block";
 });
 
-document.getElementById("installBtn").addEventListener("click", async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-  }
-});
+document.getElementById("installBtn").onclick = () => {
+  deferredPrompt.prompt();
+};
 
-// LOAD DATA
+// USER DISPLAY (LOGIN SIMULATION)
+document.getElementById("userBox").innerText =
+  "Logged in as: " + localStorage.getItem("user");
+
+// DATA
 let students = JSON.parse(localStorage.getItem("students")) || [];
 
-// SAVE DATA
-function save() {
+// SAVE
+function save(){
   localStorage.setItem("students", JSON.stringify(students));
 }
 
-// ADD STUDENT
-function addStudent() {
-  let name = document.getElementById("name").value;
-  let cls = document.getElementById("class").value;
-
-  if (!name || !cls) {
-    alert("Please fill all fields");
-    return;
-  }
-
+// ADD
+function addStudent(){
   students.push({
-    name: name,
-    class: cls,
-    user_id: 1
+    name: name.value,
+    class: class.value,
+    user: localStorage.getItem("user")
   });
 
   save();
   showStudents();
 }
 
-// SHOW STUDENTS
-function showStudents() {
-  let output = document.getElementById("output");
+// SHOW
+function showStudents(){
   output.innerHTML = "";
 
-  students = JSON.parse(localStorage.getItem("students")) || [];
-
-  students.forEach((s, i) => {
+  students.forEach((s,i)=>{
     output.innerHTML += `
       <p>
-        ${s.name} - ${s.class}
+        ${s.name} - ${s.class} (User: ${s.user})
 
         <button onclick="editStudent(${i})">Edit</button>
         <button onclick="deleteStudent(${i})">Delete</button>
@@ -67,25 +57,23 @@ function showStudents() {
 }
 
 // DELETE
-function deleteStudent(i) {
-  students.splice(i, 1);
+function deleteStudent(i){
+  students.splice(i,1);
   save();
   showStudents();
 }
 
 // EDIT
-function editStudent(i) {
-  let newName = prompt("Enter new name", students[i].name);
-  let newClass = prompt("Enter new class", students[i].class);
+function editStudent(i){
+  let n = prompt("Name", students[i].name);
+  let c = prompt("Class", students[i].class);
 
-  if (newName && newClass) {
-    students[i].name = newName;
-    students[i].class = newClass;
+  students[i].name = n;
+  students[i].class = c;
 
-    save();
-    showStudents();
-  }
+  save();
+  showStudents();
 }
 
-// AUTO LOAD
+// INIT
 showStudents();
