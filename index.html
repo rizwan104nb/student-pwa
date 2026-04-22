@@ -7,24 +7,49 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#007bff">
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f4f4f4;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+    }
+
+    button {
+      padding: 10px;
+      margin: 5px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #output {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
 <h2>Student Management PWA</h2>
 
-<input id="name" placeholder="Student Name">
-<input id="class" placeholder="Class">
+<input id="name" placeholder="Enter Name">
+<input id="class" placeholder="Enter Class">
+
+<br>
 
 <button onclick="addStudent()">Add</button>
-<button onclick="showStudents()">Show</button>
-
-<br><br>
-
-<button id="installBtn" style="display:none;">Install App</button>
 
 <div id="output"></div>
+
+<br>
+
+<button id="installBtn" style="display:none;">Install App</button>
 
 <script src="app.js"></script>
 
