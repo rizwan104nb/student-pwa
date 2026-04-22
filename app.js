@@ -1,75 +1,91 @@
-// Register Service Worker
+// REGISTER SERVICE WORKER
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
-// Open IndexedDB
-let db;
-let request = indexedDB.open("studentDB", 1);
+// INSTALL BUTTON
+let deferredPrompt;
 
-request.onupgradeneeded = function(e) {
-  db = e.target.result;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installBtn").style.display = "block";
+});
 
-  let users = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-  let students = db.createObjectStore("students", { keyPath: "id", autoIncrement: true });
+document.getElementById("installBtn").addEventListener("click", async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+  }
+});
 
-  students.createIndex("user_id", "user_id");
-};
+// LOAD DATA
+let students = JSON.parse(localStorage.getItem("students")) || [];
 
-request.onsuccess = function(e) {
-  db = e.target.result;
+// SAVE DATA
+function save() {
+  localStorage.setItem("students", JSON.stringify(students));
+}
 
-  // Default user (for JOIN)
-  let tx = db.transaction("users", "readwrite");
-  let store = tx.objectStore("users");
-  store.add({ name: "Admin" });
-};
-
-// INSERT
+// ADD STUDENT
 function addStudent() {
   let name = document.getElementById("name").value;
   let cls = document.getElementById("class").value;
 
-  let tx = db.transaction("students", "readwrite");
-  let store = tx.objectStore("students");
+  if (!name || !cls) {
+    alert("Please fill all fields");
+    return;
+  }
 
-  store.add({
+  students.push({
     name: name,
     class: cls,
     user_id: 1
   });
 
-  alert("Student Added!");
+  save();
+  showStudents();
 }
 
-// SELECT + JOIN
-function showData() {
+// SHOW STUDENTS
+function showStudents() {
   let output = document.getElementById("output");
   output.innerHTML = "";
 
-  let tx = db.transaction(["students", "users"], "readonly");
+  students = JSON.parse(localStorage.getItem("students")) || [];
 
-  let studentStore = tx.objectStore("students");
-  let userStore = tx.objectStore("users");
+  students.forEach((s, i) => {
+    output.innerHTML += `
+      <p>
+        ${s.name} - ${s.class}
 
-  studentStore.openCursor().onsuccess = function(e) {
-    let cursor = e.target.result;
-
-    if (cursor) {
-      let student = cursor.value;
-
-      // JOIN
-      let userReq = userStore.get(student.user_id);
-
-      userReq.onsuccess = function() {
-        let user = userReq.result;
-
-        output.innerHTML += `
-          <p>${student.name} (${student.class}) - User: ${user.name}</p>
-        `;
-      };
-
-      cursor.continue();
-    }
-  };
+        <button onclick="editStudent(${i})">Edit</button>
+        <button onclick="deleteStudent(${i})">Delete</button>
+      </p>
+    `;
+  });
 }
+
+// DELETE
+function deleteStudent(i) {
+  students.splice(i, 1);
+  save();
+  showStudents();
+}
+
+// EDIT
+function editStudent(i) {
+  let newName = prompt("Enter new name", students[i].name);
+  let newClass = prompt("Enter new class", students[i].class);
+
+  if (newName && newClass) {
+    students[i].name = newName;
+    students[i].class = newClass;
+
+    save();
+    showStudents();
+  }
+}
+
+// AUTO LOAD
+showStudents();
