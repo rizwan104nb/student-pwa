@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student PWA</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#007bff">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h2>Student Management PWA</h2>
+
+<input id="name" placeholder="Student Name">
+<input id="class" placeholder="Class">
+
+<button onclick="addStudent()">Add</button>
+<button onclick="showStudents()">Show</button>
+
+<br><br>
+
+<button id="installBtn" style="display:none;">Install App</button>
+
+<div id="output"></div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
