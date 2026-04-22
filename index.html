@@ -1,57 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Student PWA</title>
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#007bff">
-
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      background: #f4f4f4;
-    }
-
-    input {
-      padding: 10px;
-      margin: 5px;
-    }
-
-    button {
-      padding: 10px;
-      margin: 5px;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    #output {
-      margin-top: 20px;
-    }
-  </style>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h2>Student Management PWA</h2>
+<h2>Login Page</h2>
 
-<input id="name" placeholder="Enter Name">
-<input id="class" placeholder="Enter Class">
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
 
-<br>
+<button onclick="login()">Login</button>
 
-<button onclick="addStudent()">Add</button>
-
-<div id="output"></div>
-
-<br>
-
-<button id="installBtn" style="display:none;">Install App</button>
-
-<script src="app.js"></script>
+<script>
+function login(){
+  localStorage.setItem("user", document.getElementById("user").value);
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
