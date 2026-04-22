@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Student PWA</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#007bff">
 </head>
 
 <body>
 
-<h2>Student System</h2>
+<h1>Student PWA System</h1>
 
 <p id="userBox"></p>
 
-<input id="name" placeholder="Student Name">
-<input id="class" placeholder="Class">
+<div class="form">
+  <input id="name" placeholder="Student Name">
+  <input id="class" placeholder="Class">
+</div>
 
 <button onclick="addStudent()">Add</button>
 <button onclick="showStudents()">Show</button>
 
+<hr>
+
 <div id="output"></div>
 
+<br>
 <button id="installBtn" style="display:none;">Install App</button>
 
 <script src="app.js"></script>
