@@ -1,24 +1,16 @@
-// SW
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
-// INSTALL
-let deferredPrompt;
+// SHOW USER (JOIN concept)
+let currentUser = localStorage.getItem("user");
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById("installBtn").style.display = "block";
-});
+if(!currentUser){
+  window.location.href = "login.html";
+}
 
-document.getElementById("installBtn").onclick = () => {
-  deferredPrompt.prompt();
-};
-
-// USER DISPLAY (LOGIN SIMULATION)
 document.getElementById("userBox").innerText =
-  "Logged in as: " + localStorage.getItem("user");
+  "Logged in as: " + currentUser;
 
 // DATA
 let students = JSON.parse(localStorage.getItem("students")) || [];
@@ -28,12 +20,15 @@ function save(){
   localStorage.setItem("students", JSON.stringify(students));
 }
 
-// ADD
+// ADD (JOIN USER + STUDENT)
 function addStudent(){
+  let name = document.getElementById("name").value;
+  let cls = document.getElementById("class").value;
+
   students.push({
-    name: name.value,
-    class: class.value,
-    user: localStorage.getItem("user")
+    name: name,
+    class: cls,
+    user: currentUser   // 🔥 JOIN HERE
   });
 
   save();
@@ -42,12 +37,13 @@ function addStudent(){
 
 // SHOW
 function showStudents(){
+  let output = document.getElementById("output");
   output.innerHTML = "";
 
   students.forEach((s,i)=>{
     output.innerHTML += `
       <p>
-        ${s.name} - ${s.class} (User: ${s.user})
+        ${s.name} - ${s.class} | User: ${s.user}
 
         <button onclick="editStudent(${i})">Edit</button>
         <button onclick="deleteStudent(${i})">Delete</button>
